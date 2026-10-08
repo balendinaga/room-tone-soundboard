@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#111411">
+    <title>ROOM TONE | Soundboard</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <main class="console">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Room Tone home" data-i18n-aria="homeLink">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>ROOM<span class="brand-light">TONE</span></span>
+        </a>
+        <div class="connection" id="connection" role="status">
+          <span class="connection-dot" aria-hidden="true"></span>
+          <span id="connection-label">Connecting</span>
+        </div>
+        <label class="language-control">
+          <span class="visually-hidden" data-i18n="languageLabel">Language</span>
+          <select class="language-select" id="language-select" aria-label="Language" data-i18n-aria="languageLabel">
+            <option value="en">English</option>
+            <option value="tr">Türkçe</option>
+          </select>
+        </label>
+      </header>
+
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> <span data-i18n="localAudioDeck">LOCAL AUDIO DECK</span></p>
+          <h1 id="page-title"><span data-i18n="pageTitle">Soundboard</span><span class="title-period">.</span></h1>
+        </div>
+        <div class="library-count" aria-live="polite">
+          <strong id="sound-count">--</strong>
+          <span><span data-i18n="sounds">SOUNDS</span><br><span data-i18n="loaded">LOADED</span></span>
+        </div>
+      </section>
+
+      <section class="deck" aria-label="Sound buttons" data-i18n-aria="soundButtons">
+        <div class="deck-heading">
+          <span><span data-i18n="archive">LIBRARY</span> / <span id="deck-index">00</span></span>
+          <span class="live-label"><span></span> <span data-i18n="live">LIVE</span></span>
+        </div>
+        <div class="library-tools">
+          <div class="library-filters">
+            <label class="category-filter-label" for="category-filter" data-i18n="viewLabel">VIEW</label>
+            <select id="category-filter" aria-label="Filter by category" data-i18n-aria="categoryFilter">
+              <option value="" data-i18n="allSounds">All sounds</option>
+            </select>
+            <button class="favorites-filter" id="favorites-filter" type="button" aria-pressed="false"><span aria-hidden="true">&#9733;</span> <span data-i18n="favorites">Favorites</span></button>
+          </div>
+          <div class="library-actions">
+            <button class="tool-button" id="add-category" type="button"><span aria-hidden="true">+</span> <span data-i18n="addCategory">Category</span></button>
+            <button class="tool-button upload-button" id="upload-trigger" type="button"><span aria-hidden="true">&#8593;</span> <span data-i18n="uploadSounds">Upload sounds</span></button>
+            <input id="upload-input" type="file" accept=".mp3,.wav,.mp4,audio/mpeg,audio/wav,video/mp4" multiple hidden>
+          </div>
+        </div>
+        <div class="sound-grid" id="sound-grid" aria-live="polite" aria-busy="true">
+          <p class="empty-state" data-i18n="loadingSounds">Loading sounds...</p>
+        </div>
+        <div class="deck-footer">
+          <span data-i18n="hostOutput">HOST OUTPUT</span>
+          <span class="waveform" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span data-i18n="lanReady">LAN / READY</span>
+        </div>
+      </section>
+
+      <footer class="page-footer">
+        <span>ROOM TONE <span class="footer-separator">/</span> <span data-i18n="localNetworkSystem">LOCAL NETWORK SOUND SYSTEM</span></span>
+        <span id="refresh-label" data-i18n="liveLibrary">LIBRARY UPDATES LIVE</span>
+      </footer>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+      <dialog class="trim-dialog" id="trim-dialog" aria-labelledby="trim-title">
+        <form id="trim-form">
+          <div class="trim-dialog-heading">
+            <div>
+              <p class="eyebrow"><span class="eyebrow-line"></span> <span data-i18n="audioEditor">AUDIO EDITOR</span></p>
+              <h2 id="trim-title"><span data-i18n="trimTitle">Trim sound</span><span class="title-period">.</span></h2>
+            </div>
+            <button class="dialog-close" id="trim-close" type="button" aria-label="Close dialog" data-i18n-aria="closeDialog">×</button>
+          </div>
+          <p class="trim-source" id="trim-source"></p>
+          <div class="waveform-editor" id="waveform-editor" aria-label="Waveform and trim selection" data-i18n-aria="waveformLabel">
+            <canvas id="waveform-canvas" aria-hidden="true"></canvas>
+            <span class="waveform-centerline" aria-hidden="true"></span>
+            <span class="waveform-mask waveform-mask-start" id="waveform-mask-start" aria-hidden="true"></span>
+            <span class="waveform-mask waveform-mask-end" id="waveform-mask-end" aria-hidden="true"></span>
+            <div class="trim-selection" id="trim-selection">
+              <button class="wave-handle wave-handle-start" data-handle="start" type="button" aria-label="Drag trim start" data-i18n-aria="trimStartHandle"></button>
+              <button class="wave-handle wave-handle-end" data-handle="end" type="button" aria-label="Drag trim end" data-i18n-aria="trimEndHandle"></button>
+            </div>
+            <span class="waveform-playhead" id="waveform-playhead" aria-hidden="true"></span>
+          </div>
+          <div class="waveform-scale">
+            <span id="trim-start-label">00:00.0</span>
+            <span id="trim-position-label">00:00.0</span>
+            <span id="trim-end-label">00:00.0</span>
+          </div>
+          <div class="preview-controls">
+            <button class="preview-button" id="trim-preview" type="button" disabled><span aria-hidden="true">&#9654;</span> <span data-i18n="previewPlay">Play</span></button>
+            <button class="reset-button" id="trim-reset" type="button" disabled data-i18n="resetSelection">Reset selection</button>
+            <span class="preview-hint" id="trim-status" data-i18n="loadingSound">Loading audio...</span>
+          </div>
+          <div class="trim-fields">
+            <label><span data-i18n="startSeconds">Start (sec)</span><input id="trim-start" type="number" min="0" step="0.1" value="0" required></label>
+            <label><span data-i18n="endSeconds">End (sec)</span><input id="trim-end" type="number" min="0.1" step="0.1" value="10" required></label>
+          </div>
+          <label class="output-label"><span data-i18n="outputFilename">Output filename</span><input id="trim-output" type="text" maxlength="100" required></label>
+          <p class="trim-note" data-i18n="originalPreserved">The original file stays untouched; the trimmed audio is saved as a new file.</p>
+          <div class="trim-actions">
+            <button class="cancel-button" id="trim-cancel" type="button" data-i18n="cancel">Cancel</button>
+            <button class="save-button" id="trim-save" type="button" data-i18n="saveAsNewSound">Save as new sound</button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog class="category-dialog" id="category-dialog" aria-labelledby="category-title">
+        <form id="category-form">
+          <h2 id="category-title" data-i18n="categoryDialogTitle">Add category</h2>
+          <label for="category-name" data-i18n="categoryName">Category name</label>
+          <input id="category-name" type="text" maxlength="24" required autocomplete="off">
+          <div class="trim-actions">
+            <button class="cancel-button" id="category-cancel" type="button" data-i18n="cancel">Cancel</button>
+            <button class="save-button" type="submit" data-i18n="add">Add</button>
+          </div>
+        </form>
+      </dialog>
+    </main>
+  </body>
+</html>
