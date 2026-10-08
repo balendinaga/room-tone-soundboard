@@ -35,6 +35,25 @@ Run the syntax checks with:
 npm run check
 ```
 
+## Discord and SteelSeries Sonar
+
+Sonar is optional. The soundboard always plays audio through the host computer. To also send soundboard audio to a Discord or in-game voice chat, route it through Sonar's virtual Stream Mix:
+
+1. Install SteelSeries GG and enable Sonar.
+2. In Sonar, set **Personal Mix** to your physical headphones and select your real microphone as **Mic Input**.
+3. Add an **Aux** channel. Route Aux to both **Personal Mix** (so you can hear it) and **Stream Mix** (so voice chat can hear it). Route your microphone to Stream Mix as well.
+4. In Windows **Settings → System → Sound → Volume mixer**, play a sound once and set the output for **Windows PowerShell** (or `powershell.exe`, if that is how it appears) to **SteelSeries Sonar - Aux**. This app uses a PowerShell audio process for host playback. This per-app setting leaves the normal Windows output device unchanged.
+5. In Discord or the game's voice settings, choose **SteelSeries Sonar - Stream** as the input device. Keep the output device set to your physical headphones.
+
+### Troubleshooting voice-chat audio
+
+- **You hear the effect, but others do not:** confirm the PowerShell app is routed to Sonar Aux, and that Aux is routed to Stream Mix. Check that the Stream Mix level meter moves while the sound plays.
+- **Others hear your microphone but not effects:** the microphone route is working; check the PowerShell per-app output and Aux-to-Stream Mix route.
+- **Effects work but your voice does not:** select the real microphone in Sonar's Mic Input and route the Mic channel to Stream Mix. Discord's input should remain **SteelSeries Sonar - Stream**.
+- **Discord detects the device but effects are very quiet or missing:** temporarily turn off Discord noise suppression/Krisp and test again; voice filters can suppress short effects.
+- **You hear echo:** keep Discord's output on your physical headphones. Do not route Discord's chat output back into Stream Mix; use headphones instead of speakers.
+- **You cannot hear the effects locally:** check that the Sonar Aux channel is routed to Personal Mix and that its level is up.
+
 ## Audio files and settings
 
 Uploaded audio and MP4-derived MP3 files are stored in `sounds/`. The app creates `data/library.json` for categories, favorites, display names, and per-sound levels. These runtime files are intentionally excluded from Git. Back up the folders locally if you need to preserve your library.
